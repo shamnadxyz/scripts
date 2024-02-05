@@ -1,0 +1,3 @@
+#!/bin/sh
+killall mpv
+fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv

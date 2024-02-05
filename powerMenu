@@ -1,0 +1,8 @@
+#!/bin/sh
+options="poweroff\nreboot\nsuspend"
+selected=$(echo -e $options | wofi -d -i)
+case $selected in
+poweroff) systemctl poweroff;;
+reboot) systemctl reboot;;
+suspend) systemctl suspend;;
+esac

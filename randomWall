@@ -1,0 +1,3 @@
+#!/bin/sh
+wallpaper=$(fd . ${WALLPAPERS} -t file | shuf -n 1)
+wal -i "$wallpaper" -n

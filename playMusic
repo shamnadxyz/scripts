@@ -4,6 +4,6 @@ choice=$(echo -e $choices | wofi -d -i)
 [[ $choice ]] && killall mpv
 case $choice in
   New) fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} -t file --exec-batch ls -t | sed "s/^/\"/;s/$/\"/" | exec xargs mpv;;
-  Shuffled) fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
+  Shuffle) fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
 esac 
 

@@ -1,2 +1,2 @@
 #!/bin/sh
-grim -t png ${HOME}/Pictures/Screenshots/$(date +'%s.png')
+grim ${HOME}/Pictures/Screenshots/$(date +'%s.png')

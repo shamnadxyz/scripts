@@ -3,6 +3,7 @@ wallpaper="$(fd . ${WALLPAPERS} -t file | wofi -d -r "echo %s | sed 's/.*\///g'"
 if [[ $wallpaper ]] then
     killall swaybg
     wal -i "$wallpaper" -n
+    waybarBackground &
     killall waybar && waybar &
     swaybg -i "$wallpaper" -m fill
 fi

@@ -1,5 +1,5 @@
 #!/bin/sh
-choice="$(fd . ${MUSIC_DIR} -t directory | wofi -d -r "echo %s | sed 's/\/$//;s/.*\///g'")"
+choice="$(fd . ${MUSIC_DIR} -t directory | wofi -d -r "echo \"%s\" | sed 's/\/$//;s/.*\///g'")"
 if [[ $choice ]] then
     killall mpv
     fd "\.mp3|\.flac|.\wav" "$choice" | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv

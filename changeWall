@@ -4,6 +4,5 @@ if [[ $wallpaper ]] then
     killall swaybg
     wal -i "$wallpaper" -n
     waybarBackground &
-    killall waybar && waybar &
     swaybg -i "$wallpaper" -m fill
 fi

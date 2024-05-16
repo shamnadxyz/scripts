@@ -1,9 +1,12 @@
 #!/bin/sh
-choices="New\nShuffle"
-choice=$(echo -e $choices | wofi -d -i)
-[[ $choice ]] && killall mpv
-case $choice in
-  New) fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} -t file --exec-batch ls -t | sed "s/^/\"/;s/$/\"/" | exec xargs mpv;;
-  Shuffle) fd "\.mp3|\.flac|.\wav" ${MUSIC_DIR} -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
-esac 
+choice="$(fd . ${MUSIC_DIR} -t symlink -t directory | wofi -d -r "echo \"%s\" | sed 's/\/$//;s/.*\///g'")"
 
+if [[ -d $choice ]]; then
+  killall mpv
+  sort_methods="New\nShuffle"
+  sort_method=$(echo -e $sort_methods | wofi -d -i -p "Sort method" )
+  case $sort_method in
+    New) fd "\.mp3|\.flac|.\wav" ${choice} -t file --exec-batch ls -t | sed "s/^/\"/;s/$/\"/" | exec xargs mpv;;
+    *) fd "\.mp3|\.flac|.\wav" ${choice} -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
+  esac 
+fi

@@ -1,2 +1,2 @@
 #!/bin/sh
-grim ${HOME}/Pictures/Screenshots/$(date +'%s.png')
+grim ${HOME}/Pictures/Screenshots/$(date +'%s.png') && notify-send "Screenshot taken" -t 500

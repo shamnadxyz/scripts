@@ -6,7 +6,7 @@ if [[ -d $choice ]]; then
   sort_methods="New\nShuffle"
   sort_method=$(echo -e $sort_methods | wofi -d -i -p "Sort method" )
   case $sort_method in
-    New) fd "\.mp3|\.flac|.\wav" ${choice} -t file --exec-batch ls -t | sed "s/^/\"/;s/$/\"/" | exec xargs mpv;;
-    *) fd "\.mp3|\.flac|.\wav" ${choice} -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
+    New) fd "\.mp3|\.flac|.\wav" "$choice" -t file --exec-batch ls -t | sed "s/^/\"/;s/$/\"/" | exec xargs mpv;;
+    *) fd "\.mp3|\.flac|.\wav" "$choice" -t file | sed "s/^/\"/;s/$/\"/" | shuf | exec xargs mpv;;
   esac 
 fi

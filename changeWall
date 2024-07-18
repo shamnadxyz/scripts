@@ -1,5 +1,6 @@
 #!/bin/sh
-wallpaper="$(fd . ${WALLPAPERS} -t file | wofi -d -r "echo \"%s\" | sed 's/.*\///g'")"
+# Q for setting the wallpaper
+wallpaper="$(nsxiv "$WALLPAPERS" -rot)"
 if [[ $wallpaper ]] then
     killall swaybg
     wal -i "$wallpaper" -n

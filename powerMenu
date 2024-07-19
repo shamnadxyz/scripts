@@ -1,6 +1,5 @@
 #!/bin/sh
-options="poweroff\nreboot\nsuspend"
-selected=$(echo -e $options | wofi -d -i)
+selected=$( echo -e "  Poweroff\n  Reboot\n  Suspend" | wofi -i --dmenu --width 200 --height 185 -s ~/.config/wofi/powermenu.css | awk '{print tolower($2)}' )
 case $selected in
 poweroff) systemctl poweroff;;
 reboot) systemctl reboot;;

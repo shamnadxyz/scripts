@@ -1,5 +1,5 @@
 #!/bin/sh
-choice="$(fd . ${MUSIC_DIR} -t symlink -t directory | wofi -d -r "echo \"%s\" | sed 's/\/$//;s/.*\///g'")"
+choice="$(fd . ${MUSIC_DIR} -t symlink -t directory | wofi -d -r "echo -n \"%s\" | sed 's/\/$//;s/.*\///g'")"
 
 if [[ -d $choice ]]; then
   killall mpv

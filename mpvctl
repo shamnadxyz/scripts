@@ -1,0 +1,13 @@
+#!/bin/bash
+action=$1
+if [ -z "$action" ];then
+	options="play/pause\nnext\nprev\nshuffle"
+	action="$(echo -e "$options" | wofi --width 200 --height 190 -d -p "mpv controls")"
+fi
+
+case "$action" in
+"play/pause") echo cycle pause | socat - "$XDG_CONFIG_HOME/mpv/socket";;
+"next") echo playlist-next | socat - "$XDG_CONFIG_HOME/mpv/socket";;
+"prev") echo playlist-prev | socat - "$XDG_CONFIG_HOME/mpv/socket";;
+"shuffle") echo playlist-shuffle | socat - "$XDG_CONFIG_HOME/mpv/socket";;
+esac

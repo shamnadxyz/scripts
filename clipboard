@@ -1,0 +1,36 @@
+#!/bin/sh
+
+TRASH="${HOME}/.cache/.clipboard_trash.txt"
+[ ! -f "$TRASH" ] && touch "$TRASH"
+
+if pgrep -f "^wofi";then
+	notify-send "clip already running"
+	exit 1
+elif [ -z "$CLIPBOARD" ];then
+	notify-send "CLIPBOARD env is not set"
+	exit 1
+fi
+
+while getopts "adp" flag;do
+	case "$flag" in
+		a)
+			test="$(wl-paste)"
+			[ -z "$test" ] && exit 1
+			if ! grep -e "^$test$" "$CLIPBOARD";then
+				wl-paste >> "$CLIPBOARD"
+			fi
+			sed 's/^\n$/d' "$CLIPBOARD" -i
+			;;
+		d)
+			entry_to_delete="$(cat "$CLIPBOARD" | wofi -d )"
+			if grep -e "^$entry_to_delete$" "$CLIPBOARD";then
+				echo "$entry_to_delete" >> "$TRASH"
+				sed "|$entry_to_delete|d" -i "$CLIPBOARD"
+			fi
+			;;
+		p)
+			text="$(cat "$CLIPBOARD" | wofi -d )"
+			[ -n "$text" ] && wtype "$text"
+			;;
+	esac
+done

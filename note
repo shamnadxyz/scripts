@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -z "$NOTES" ];then
+	notify-send "NOTES env is not set"
+	exit 1
+fi
+
+menu="New\nOpen"
+choice="$(echo -e "$menu" | fzf)"
+[ $choice ] || exit 1
+case "$choice" in
+"Open") nvim $(find $NOTES -type f| fzf);;
+"New") read -p 'Enter filename:' filename  && nvim "$NOTES/$filename"
+esac

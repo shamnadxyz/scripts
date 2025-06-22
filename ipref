@@ -1,0 +1,48 @@
+#!/bin/bash
+
+SSH_CONFIG="${HOME}/.ssh/config"
+SSH_CONFIG_BACKUP="${HOME}/.ssh/config.bkp"
+
+replace_ip(){
+    local old_ip="$1"
+    local new_ip="$2"
+    cp -a "$SSH_CONFIG" "$SSH_CONFIG_BACKUP"
+    echo "Old config copied to $SSH_CONFIG_BACKUP"
+    sed -i "s/$old_ip/$new_ip/" "$SSH_CONFIG"
+    echo "IP address replaced: $old_ip -> $new_ip"
+    exit 0
+}
+
+is_valid_ip_address(){
+    local ip_address="$1"
+    [[ "$ip_address" =~ ^((25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1?[0-9]{1,2})$ ]]
+}
+
+# Read host and get the old IP
+read -p "Name of host: " Host
+old_ip="$(grep "$Host" -A 1 "$SSH_CONFIG" | grep -e "[0-9]*\..*" -o -m1)"
+[ "$old_ip" ] || exit 1
+
+# Get the new IP from arp table
+new_ip="$(arp -a | head -n 1 | awk '{print $2}' | sed 's/[()]//g')"
+
+# If the new IP is valid, ask for confirmation
+if is_valid_ip_address "$new_ip"; then
+    echo "$old_ip -> $new_ip"
+    read -p "Confirm change from arp table (y/n) : " choice_arp
+    if [[ "$choice_arp" = "y" ]]; then
+        replace_ip "$old_ip" "$new_ip"
+    fi
+fi
+
+# Ask for manual IP input
+read -p "Enter the IP address : " ip_address
+if is_valid_ip_address "$ip_address"; then
+    echo "$old_ip -> $ip_address"
+    read -p "Confirm change (y/n) : " choice_manual
+    if [[ "$choice_manual" = "y" ]]; then
+        replace_ip "$old_ip" "$ip_address"
+    fi
+else
+    echo "$ip_address is not a valid IP address"
+fi

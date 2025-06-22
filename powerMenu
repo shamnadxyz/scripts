@@ -1,7 +1,23 @@
-#!/bin/sh
-selected="$( echo -e "  Poweroff\n  Reboot\n  Suspend" | wofi -i --dmenu --width 200 --height 185 -s ~/.config/wofi/powermenu.css )"
+#!/bin/bash
+selected="$( echo -e "  Poweroff\n  Reboot\n  Suspend\n  Lock\n  Hibernate" \
+	| wofi -i --dmenu --width 200 --height 160 -s ~/.config/wofi/powermenu.css )"
+selected="${selected##* }"
 case "$selected" in
-"  Poweroff") systemctl poweroff;;
-"  Reboot") systemctl reboot;;
-"  Suspend") systemctl suspend;;
+"Hibernate") 
+	swaylock -c 000000 &
+	systemctl hibernate
+	;;
+"Lock") 
+	swaylock -c 000000 
+	;;
+"Poweroff") 
+	systemctl poweroff
+	;;
+"Reboot") 
+	systemctl reboot
+	;;
+"Suspend") 
+	swaylock -c 000000 &
+	systemctl suspend
+	;;
 esac

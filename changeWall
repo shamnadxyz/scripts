@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+pgrep -f "nsxiv -b "$WALLPAPERS" -rot" && exit 1
 notify-send "\"Q\" to choose wallpaper"
 wallpaper="$(nsxiv -b "$WALLPAPERS" -rot)"
 if [[ $wallpaper ]] then
@@ -6,6 +7,5 @@ if [[ $wallpaper ]] then
     wal -i "$wallpaper" -n
     waybarBackground &
     dunstTheme &
-    killall waybar && waybar &
     swaybg -i "$wallpaper" -m fill
 fi

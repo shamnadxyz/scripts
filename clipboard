@@ -3,6 +3,34 @@
 TRASH="${HOME}/.cache/.clipboard_trash.txt"
 [ ! -f "$TRASH" ] && touch "$TRASH"
 
+print_help(){
+	echo "usage: clipboard [options]"
+	printf "%s\n" "options:"
+	printf -- "  %-5s%-5s\n" "-a" "add content of system clipboard to clipboard file"
+	printf -- "  %-5s%-5s\n" "-d" "delete entry from clipboard file"
+	printf -- "  %-5s%-5s\n" "-p" "paste from clipboard file"
+}
+add_to_clipboard(){
+	test="$(wl-paste)"
+	[ -z "$test" ] && exit 1
+	if ! grep -e "^$test$" "$CLIPBOARD";then
+		wl-paste >> "$CLIPBOARD"
+	fi
+}
+
+delete_from_clipboard(){
+	entry_to_delete="$(cat "$CLIPBOARD" | wofi -d )"
+	if grep -e "^$entry_to_delete$" "$CLIPBOARD";then
+		echo "$entry_to_delete" >> "$TRASH"
+		sed "|$entry_to_delete|d" -i "$CLIPBOARD"
+	fi
+}
+
+paste_from_clipboard(){
+	text="$(cat "$CLIPBOARD" | wofi -d )"
+	[ -n "$text" ] && wtype "$text"
+}
+
 if pgrep -f "^wofi";then
 	notify-send "clip already running"
 	exit 1
@@ -14,23 +42,17 @@ fi
 while getopts "adp" flag;do
 	case "$flag" in
 		a)
-			test="$(wl-paste)"
-			[ -z "$test" ] && exit 1
-			if ! grep -e "^$test$" "$CLIPBOARD";then
-				wl-paste >> "$CLIPBOARD"
-			fi
-			sed 's/^\n$/d' "$CLIPBOARD" -i
+			add_to_clipboard
 			;;
 		d)
-			entry_to_delete="$(cat "$CLIPBOARD" | wofi -d )"
-			if grep -e "^$entry_to_delete$" "$CLIPBOARD";then
-				echo "$entry_to_delete" >> "$TRASH"
-				sed "|$entry_to_delete|d" -i "$CLIPBOARD"
-			fi
+			delete_from_clipboard
 			;;
 		p)
-			text="$(cat "$CLIPBOARD" | wofi -d )"
-			[ -n "$text" ] && wtype "$text"
+			paste_from_clipboard
 			;;
 	esac
 done
+
+if [ ! -s "$1" ];then
+	print_help
+fi

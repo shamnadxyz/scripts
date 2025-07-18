@@ -3,8 +3,9 @@ pgrep -f "nsxiv -b "$WALLPAPERS" -rot" && exit 1
 notify-send "\"Q\" to choose wallpaper"
 wallpaper="$(nsxiv -b "$WALLPAPERS" -rot)"
 if [[ $wallpaper ]] then
-    killall swaybg
-    wal -i "$wallpaper" -n
-    dunstTheme &
-    swaybg -i "$wallpaper" -m fill
+	killall swaybg
+	wal -i "$wallpaper" -n
+	waybarBackground &
+	dunstTheme &
+	swaybg -i "$wallpaper" -m fill
 fi

@@ -5,7 +5,7 @@ wallpaper="$(nsxiv -b "$WALLPAPERS" -rot)"
 if [[ $wallpaper ]] then
 	killall swaybg
 	wal -i "$wallpaper" -n
-	waybarBackground &
-	dunstTheme &
+	waybar-background &
+	dunst-theme &
 	swaybg -i "$wallpaper" -m fill
 fi

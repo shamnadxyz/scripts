@@ -2,35 +2,35 @@
 
 # Returns the first available lock screen application.
 get_lock_app() {
-    if command -v hyprlock >/dev/null 2>&1; then
-        echo "hyprlock"
-    elif command -v swaylock >/dev/null 2>&1; then
-        echo "swaylock"
-    else
-        notify-send "No lock application found" \
-                    "Install 'swaylock' or 'hyprlock'. Proceeding without lock in 5 seconds."
-        sleep 5
-        return 1
-    fi
+	if command -v hyprlock >/dev/null 2>&1; then
+		echo "hyprlock"
+	elif command -v swaylock >/dev/null 2>&1; then
+		echo "swaylock"
+	else
+		notify-send "No lock application found" \
+			"Install 'swaylock' or 'hyprlock'. Proceeding without lock in 5 seconds."
+		sleep 5
+		return 1
+	fi
 }
 
 # Launches the lock screen in the background
 lockscreen() {
-    local lock_app
-    lock_app="$(get_lock_app)" || return 1
+	local lock_app
+	lock_app="$(get_lock_app)" || return 1
 
-    case "$lock_app" in
-        swaylock) swaylock -c 000000 & ;;
-        hyprlock) hyprlock & ;;
-    esac
+	case "$lock_app" in
+		swaylock) swaylock -c 000000 & ;;
+		hyprlock) hyprlock & ;;
+	esac
 
-    sleep 1
+	sleep 1
 }
 
 # Exits if wofi is not installed.
 if ! command -v wofi >/dev/null 2>&1; then
-    notify-send "Missing required tool: wofi"
-    exit 1
+	notify-send "Missing required tool: wofi"
+	exit 1
 fi
 
 read -r -d '' menu_items <<'EOF'
@@ -52,25 +52,25 @@ action="${selection##* }"
 
 # Executes the corresponding system command based on the user's selection.
 case "$action" in
-    Poweroff)
-        systemctl poweroff
-        ;;
-    Reboot)
-        systemctl reboot
-        ;;
-    Suspend)
-        lockscreen
-        systemctl suspend
-        ;;
-    Hibernate)
-        lockscreen
-        systemctl hibernate
-        ;;
-    Lock)
-        lockscreen
-        ;;
-    *)
-        notify-send "Invalid option selected: $action"
-        exit 1
-        ;;
+	Poweroff)
+		systemctl poweroff
+		;;
+	Reboot)
+		systemctl reboot
+		;;
+	Suspend)
+		lockscreen
+		systemctl suspend
+		;;
+	Hibernate)
+		lockscreen
+		systemctl hibernate
+		;;
+	Lock)
+		lockscreen
+		;;
+	*)
+		notify-send "Invalid option selected: $action"
+		exit 1
+		;;
 esac

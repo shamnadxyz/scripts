@@ -1,4 +1,6 @@
 #!/bin/sh
 source ${HOME}/.cache/wal/waybar_background.sh
-sed "s/rgba.*/$background_rgb/" ${HOME}/.config/waybar/style.css -i
+old_color="$(grep "window#waybar" ~/.config/waybar/style.css -A 1 | grep -P "[0-9]*, [0-9]*, ?[0-9]*, ?[0-9][.][0-9]" -o)"
 
+cp ${HOME}/.config/waybar/style.css  ${HOME}/.config/waybar/style.css.bkp
+sed "s/$old_color/$background_rgb/" ${HOME}/.config/waybar/style.css -i

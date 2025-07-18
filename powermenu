@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-set -euo pipefail
 
 # Returns the first available lock screen application.
 get_lock_app() {

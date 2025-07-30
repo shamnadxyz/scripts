@@ -23,54 +23,72 @@ lockscreen() {
 		swaylock) swaylock -c 000000 & ;;
 		hyprlock) hyprlock & ;;
 	esac
-
 	sleep 1
+}
+
+to_lower() {
+	printf '%s\n' "${1,,}"
+}
+
+# Launch menu to select the action
+get_action() {
+	local menu_items selection action
+
+	# Define menu items as array for better structure
+	menu_items=(
+		" Poweroff"
+		" Reboot"
+		" Suspend"
+		" Lock"
+		" Hibernate"
+	)
+
+	# Displays the power menu using wofi and stores the selected line.
+	selection=$(printf '%s\n' "${menu_items[@]}" | wofi -i --dmenu --width 230 --height 200 -s ~/.config/wofi/powermenu.css)
+
+	# Exits if no selection was made.
+	[[ -z "$selection" ]] && exit 1
+
+	# Extracts the action label from the selected menu entry.
+	action="${selection##* }"
+	echo "$action"
 }
 
 # Exits if wofi is not installed.
 if ! command -v wofi >/dev/null 2>&1; then
-	notify-send "Missing required tool: wofi"
+	notify-send "Missing required program: wofi"
 	exit 1
 fi
 
-read -r -d '' menu_items <<'EOF'
-|Poweroff
-|Reboot
-|Suspend
-|Lock
-|Hibernate
-EOF
+action=$1
 
-# Displays the power menu using wofi and stores the selected line.
-selection="$(echo "$menu_items" | column -s '|' -t | wofi -i --dmenu --width 230 --height 236 -s ~/.config/wofi/powermenu.css)"
+if [ -z "$action" ]; then
+	action="$(get_action)" || exit
+fi
 
-# Extracts the action label from the selected menu entry.
-action="${selection##* }"
-
-# Exits if no selection was made.
-[[ -z "$action" ]] && exit 0
+action=$(to_lower "$action")
 
 # Executes the corresponding system command based on the user's selection.
 case "$action" in
-	Poweroff)
+	poweroff)
 		systemctl poweroff
 		;;
-	Reboot)
+	reboot)
 		systemctl reboot
 		;;
-	Suspend)
+	suspend)
 		lockscreen
 		systemctl suspend
 		;;
-	Hibernate)
+	hibernate)
 		lockscreen
 		systemctl hibernate
 		;;
-	Lock)
+	lock)
 		lockscreen
 		;;
 	*)
-		notify-send "Invalid option selected: $action"
+		notify-send "Invalid option"
 		exit 1
 		;;
 esac

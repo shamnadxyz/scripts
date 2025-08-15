@@ -22,7 +22,7 @@ delete_from_clipboard(){
 	text="$(cat "$CLIPBOARD" | wofi -d )"
 	if grep -e "^$text$" "$CLIPBOARD";then
 		echo "$text" >> "$TRASH"
-		sed "|$text|d" -i "$CLIPBOARD"
+		sed "\|$text|d" -i "$CLIPBOARD"
 	fi
 }
 

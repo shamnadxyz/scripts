@@ -44,7 +44,7 @@ get_action() {
 	)
 
 	# Displays the power menu using wofi and stores the selected line.
-	selection=$(printf '%s\n' "${menu_items[@]}" | wofi -i --dmenu --width 230 --height 200 -s ~/.config/wofi/powermenu.css)
+	selection=$(printf '%s\n' "${menu_items[@]}" | wofi -i --dmenu --width 230 --height 245)
 
 	# Exits if no selection was made.
 	[[ -z "$selection" ]] && exit 1
@@ -77,11 +77,9 @@ case "$action" in
 		systemctl reboot
 		;;
 	suspend)
-		lockscreen
 		systemctl suspend
 		;;
 	hibernate)
-		lockscreen
 		systemctl hibernate
 		;;
 	lock)

@@ -1,11 +1,9 @@
 #!/bin/bash
 pgrep -f "nsxiv -b "$WALLPAPERS" -rot" && exit 1
-notify-send "\"Q\" to choose wallpaper"
+notify-send "Press \"Q\" to set the wallpaper"
 wallpaper="$(nsxiv -b "$WALLPAPERS" -rot)"
-if [[ $wallpaper ]] then
-	killall swaybg
-	wal -i "$wallpaper" -n
-	waybar-background &
-	dunst-theme &
-	swaybg -i "$wallpaper" -m fill
+WALLPAPER_PATH="$HOME/.cache/wallpaper"
+if [[ -f $wallpaper ]] then
+	ln -s "$wallpaper" "$WALLPAPER_PATH" -f
+	swaymsg reload
 fi

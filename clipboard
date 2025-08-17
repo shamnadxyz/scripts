@@ -14,7 +14,7 @@ add_to_clipboard(){
 	text="$(wl-paste)"
 	[ -z "$text" ] && exit 1
 	if ! grep -e "^$text$" "$CLIPBOARD";then
-		wl-paste >> "$CLIPBOARD"
+		wl-paste | awk '{printf "%s\\n", $0}' >> "$CLIPBOARD"
 	fi
 }
 
@@ -28,7 +28,7 @@ delete_from_clipboard(){
 
 paste_from_clipboard(){
 	text="$(cat "$CLIPBOARD" | wofi -d )"
-	[ -n "$text" ] && wtype "$text"
+	[ -n "$text" ] && wtype "$(echo "$text")"
 }
 
 if pgrep -f "^wofi";then

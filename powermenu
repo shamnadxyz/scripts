@@ -44,7 +44,7 @@ get_action() {
 	)
 
 	# Displays the power menu using wofi and stores the selected line.
-	selection=$(printf '%s\n' "${menu_items[@]}" | wofi -i --dmenu --width 230 --height 245)
+	selection=$(printf '%s\n' "${menu_items[@]}" | wofi --style ~/.config/wofi/wofi-dmenu.css -i --dmenu --width 230 --height 253)
 
 	# Exits if no selection was made.
 	[[ -z "$selection" ]] && exit 1

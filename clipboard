@@ -19,7 +19,7 @@ add_to_clipboard(){
 }
 
 delete_from_clipboard(){
-	text="$(cat "$CLIPBOARD" | wofi -d )"
+	text="$(cat "$CLIPBOARD" | wofi --style ~/.config/wofi/wofi-dmenu.css -d )"
 	if grep -e "^$text$" "$CLIPBOARD";then
 		echo "$text" >> "$TRASH"
 		sed "\|$text|d" -i "$CLIPBOARD"
@@ -27,7 +27,7 @@ delete_from_clipboard(){
 }
 
 paste_from_clipboard(){
-	text="$(cat "$CLIPBOARD" | wofi -d )"
+	text="$(cat "$CLIPBOARD" | wofi --style ~/.config/wofi/wofi-dmenu.css -d )"
 	[ -n "$text" ] && wtype "$(echo "$text")"
 }
 

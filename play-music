@@ -3,11 +3,11 @@
 declare playlist
 
 choice="$(find -L "${MUSIC_DIR}" -type d \
-  | wofi -id -r "printf '%s' | sed 's/\/$//;s/.*\///g' | cut -c1-72 | tr -d '\n' ")"
+  | wofi --style ~/.config/wofi/wofi-dmenu.css -id -r "printf '%s' | sed 's/\/$//;s/.*\///g' | cut -c1-72 | tr -d '\n' ")"
 
 [ -d "$choice" ] || exit 1
 
-sort_method=$(echo -e "Date\nShuffle" | wofi -id --width 100 --height 75 -p "Order By") 
+sort_method=$(echo -e "Date\nShuffle" | wofi --style ~/.config/wofi/wofi-dmenu.css -id --width 100 --height 158 -p "Order By") 
 
 case "$sort_method" in
   Date) playlist="$(find -L "$choice" -type f '(' -name '*.mp3' -o -name '*.flac' -o -name '*.wav' ')' -print0 | xargs -0 ls -t)";;
@@ -20,7 +20,7 @@ mpv_running="$(pgrep -f "mpv.*")"
 if [ "$mpv_running" ];then
 
   notify-send "Another instance of mpv is already running"
-  action="$(echo -e "Yes\nNo" | wofi -id --width 100 --height 75 -p "Kill mpv ?")"
+  action="$(echo -e "Yes\nNo" | wofi --style ~/.config/wofi/wofi-dmenu.css -id --width 100 --height 75 -p "Kill mpv ?")"
 
   case "$action" in
     Yes) pkill -f "mpv.*";;
